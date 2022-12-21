@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Surveyhubtrue
+      MYSQL_DATABASE: manageuser
+      MYSQL_PASSWORD: Surveyhubtrue
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: Surveyhubtrue
+      MYSQL_ROOT_PASSWORD: Surveyhubtrue
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
+volumes:
+  db_data:
