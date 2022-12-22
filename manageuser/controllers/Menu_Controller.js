@@ -33,19 +33,20 @@ module.exports.getmenuByPrivi = async (privi) => {
     }
   }
   return menu;
-}
+};
 
 // input = "1,2,3"
 module.exports.getMenuByMenuSelected = async (input_privi) => {
-  let split_input = input_privi.split(",");
-  let menu = [];
-  for (let i = 0; i < split_input.length; i++){
-    let mainmenus = await Mainmenu.findAll({
-      where: {
-        id: Number(split_input[i])
-      }
-    });
-    let sub_menu = [];
+  try {
+    let split_input = input_privi.split(",");
+    let menu = [];
+    for (let i = 0; i < split_input.length; i++) {
+      let mainmenus = await Mainmenu.findAll({
+        where: {
+          id: Number(split_input[i]),
+        },
+      });
+      let sub_menu = [];
       if (mainmenus[0].dataValues.sub_menu != null) {
         let sub_split = mainmenus[0].dataValues.sub_menu.split(",");
         for (let j = 0; j < sub_split.length; j++) {
@@ -61,6 +62,14 @@ module.exports.getMenuByMenuSelected = async (input_privi) => {
         main: mainmenus[0].dataValues,
         sub: sub_menu,
       };
+    }
+    return menu;
+  } catch (err) {
+    console.log(err)
   }
-  return menu;
-}
+};
+
+module.exports.getAllMenu = async (req, res) => {
+  let mainmenus = await Mainmenu.findAll();
+  return res.json({ mainmenu: mainmenus });
+};
