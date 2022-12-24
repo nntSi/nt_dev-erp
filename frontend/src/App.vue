@@ -14,9 +14,10 @@
 <script setup lang="ts">
 // import
 import SideBarVue from './components/SideBar.vue';
-import HeadComponent from './components/HeadComponent.vue'
+import HeadComponent from './components/HeadComponent.vue';
 import { useStore } from 'vuex';
 import { onMounted } from 'vue';
+import FooterComponent from "./components/FooterComponent.vue";
 // setup
 const store = useStore();
 // hook app create

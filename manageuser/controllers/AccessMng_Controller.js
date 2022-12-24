@@ -1,3 +1,4 @@
+const { where, Op } = require("sequelize");
 const Accessmng = require("../models/Accessmng");
 
 module.exports.createAcs = async (req, res) => {
@@ -10,9 +11,32 @@ module.exports.createAcs = async (req, res) => {
 };
 
 module.exports.getAllAcs = async (req, res) => {
-  const Acs = await Accessmng.findAll();
-  return res.json({data: Acs});
+  const Acs = await Accessmng.findAll(
+    { limit: 5 }/* ,
+    { where : {
+      [Op.or] : [
+        {id : { [Op.substring]: req.params.search }},
+        {position_name : { [Op.substring]: req.params.search }},
+        {department : { [Op.substring]: req.params.search }}
+      ]
+    }} */
+  );
+  return res.json({body: Acs});
 };
+
+module.exports.getSearch = async (req, res) => {
+  const Acs = await Accessmng.findAll(
+    { where : {
+      [Op.or] : [
+        {id : { [Op.substring]: req.params.search }},
+        {position_name : { [Op.substring]: req.params.search }},
+        {department : { [Op.substring]: req.params.search }}
+      ]
+    }},
+    { limit: 5 },
+  )
+  return res.json({body: Acs});
+}
 
 module.exports.getAcsByID = async (ID) => {
   const ascID = await Accessmng.findAll({
@@ -38,5 +62,5 @@ module.exports.deleteByID = async (req, res) => {
       id: req.params.ID
     }
   });
-  return res.json({message: "Delete success"});
+  return res.json({message: "Delete success", status: true});
 }
