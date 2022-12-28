@@ -11,7 +11,7 @@
           <li v-for="item in inintail.menu" v-bind:key="item['main']['id']">
             <button v-on:click="gotopage(item['main']['route'], 'main' + item['main']['id'])" type="button" :class="crrtcolorM('main' + item['main']['id'])">
             <!-- <button v-on:click="gotopage(item['main']['route'], 'main' + item['main']['id'])" type="button" :aria-controls="item['main']['id']" :data-collapse-toggle="item['main']['id']" :class="crrtcolorM('main' + item['main']['id'])"> -->
-              <i :class="item['main']['icon'] + 'mr-3'"></i>
+              <i :class="item['main']['icon'] + ' mr-3'"></i>
               {{item['main']['menu_name']}}
             </button>
             <ul :id="item['main']['id']" v-if="checkHaveSub(item['sub'])" :class="hiddenSub">

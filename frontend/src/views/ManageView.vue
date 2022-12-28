@@ -25,17 +25,24 @@
         placeholder="ผู้จัดการ, หัวหน้าฝ่ายขาย, ผู้ดูแลระบบ"
         required
       />
-      <label
-        class="block mb-2 text-md font-medium text-gray-900 dark:text-white"
-        >ชื่อแผนก</label
-      >
-      <input
+      <div class="mb-2 flex items-center">
+        <label class="block text-md font-medium mr-2 text-gray-900 dark:text-white">แผนก</label>
+        <button type="button" class="text-xs"><i class="bi bi-plus-circle-dotted" @click="initial_data.showDepartment = !initial_data.showDepartment"></i></button>
+      </div>
+      <select class="mb-3 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" v-model="data_for_sent.departmentID">
+        <option v-for="(item, index) in initial_data.departmentSelect" :key="index" :value="item['id']">{{ item['department_name'] }}</option>
+        <!-- <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="FR">France</option>
+        <option value="DE">Germany</option> -->
+      </select>
+      <!-- <input
         v-model="data_for_sent.department"
         type="text"
         class="bg-white border mb-3 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-slate-500 focus:border-slate-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
         placeholder="แผนก IT, แผนกการเงิน, ฝ่ายขาย"
         required
-      />
+      /> -->
       <label
         class="block mb-2 text-md font-medium text-gray-900 dark:text-white"
         >เมนูที่สามารถเข้าถึงได้</label
@@ -64,7 +71,7 @@
       <button
         @click="showconfirm"
         type="button"
-        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-slate-700 rounded-md hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        class="inline-flex items-center px-3 py-2.5 text-sm font-medium text-center text-white bg-slate-700 rounded-md hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         บันทึกสิทธิการเข้าใช้งาน
       </button>
@@ -111,10 +118,12 @@
               <tbody>
                 <tr v-for="(item, index) in initial_data.acs_table" :key="index" class="bg-white dark:bg-gray-800 dark:border-gray-700 border-b">
                   <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ item['position_name'] }}</th>
-                  <td class="py-4 px-6">{{ item['department'] }}</td>
+                  <td class="py-4 px-6">{{ item['Department']['department_name'] }}</td>
                   <td class="py-4 px-6">{{ item['menu_privi'] }}</td>
                   <td class="py-4 px-6 text-right">
-                    <a href="#" class="font-medium text-slate-600 dark:text-slate-500 hover:underline" data-modal-toggle="editPermission" @click="ShowUpdateAcs(item['id'])">Edit</a>
+                    <a href="#" class="font-medium text-slate-600 dark:text-slate-500 hover:underline" data-modal-toggle="editPermission" @click="ShowUpdateAcs(item['id'])">แก้ไข</a>
+                    /
+                    <a href="#" class="font-medium text-slate-600 dark:text-slate-500 hover:underline">ลบ</a>
                   </td>
                 </tr>
               </tbody>
@@ -158,13 +167,9 @@
               class="block mb-2 text-md font-medium text-gray-900 dark:text-white"
               >ชื่อแผนก</label
             >
-            <input
-              v-model="dataEdit.department"
-              type="text"
-              class="bg-gray-50 border mb-3 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-slate-500 focus:border-slate-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              placeholder="แผนก IT, แผนกการเงิน, ฝ่ายขาย"
-              required
-            />
+            <select v-model="dataEdit.departmentID" id="countries" class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-slate-500 focus:border-slate-500 block w-full px-2.5 py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500">
+              <option v-for="(item, index) in initial_data.departmentSelect" :key="index" :value="item['id']">{{ item['department_name'] }}</option>
+            </select>
             <label
               class="block mb-2 text-md font-medium text-gray-900 dark:text-white"
               >เมนูที่สามารถเข้าถึงได้</label
@@ -186,6 +191,57 @@
       </div>
     </div>
     <SuccessModal v-if="initial_data.showSuccess"/>
+    <ModalComponentVue v-if="initial_data.showDepartment">
+      <h2 class="mb-2 text-lg text-center font-normal font-bold text-slate-700 dark:text-gray-400">
+        การจัดการแผนก
+      </h2>
+      <label class="block mb-2 text-md font-medium text-gray-900 dark:text-white">ชื่อแผนก</label>
+      <div class="flex items-center mb-3">
+        <input
+        v-model="departmentData.department_name"
+        type="text"
+        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-slate-500 focus:border-slate-500 block w-4/5 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        placeholder="ฝ่ายขาย, การตลาด, IT"
+        required
+        />
+        <button class="items-center border text-white ml-auto py-2 px-7 rounded-md bg-slate-700 hover:bg-slate-800" @click="addNewDepartment">เพิ่ม</button>
+      </div>
+      <div class="overflow-x-auto relative border rounded-md mb-3">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b">
+            <tr>
+              <th scope="col" class="py-3 px-6">
+                ID
+              </th>
+              <th scope="col" class="py-3 px-6">
+                ชื่อแผนก
+              </th>
+              <th scope="col" class="py-3 px-6">
+                การจัดการ
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr v-for="(item, index) in initial_data.departmentData" class="bg-white dark:bg-gray-800 dark:border-gray-700">
+                  <th scope="row" class="py-4 px-7 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ item["id"] }}
+                  </th>
+                  <td class="py-4 px-6 hover">
+                    {{ item["department_name"] }}
+                  </td>
+                  <td class="py-4 px-6">
+                    <button class="mr-0 hover:underline" @click="">แก้ไข</button>
+                    /
+                    <button class="hover:hover:underline" @click="deleteDepartment(item['id'])">ลบ</button>
+                  </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="w-full flex">
+        <button class="ml-auto py-2 px-5 border rounded-md bg-gray-50 hover:bg-gray-100" @click="initial_data.showDepartment = false">ปิด</button>
+      </div>
+    </ModalComponentVue>
   </div>
 </template>
 
@@ -197,18 +253,26 @@ import { apiUrl } from "../services/constant";
 import confirmComponent  from "../components/ConfirmComponent.vue";
 import SearchComponent from "../components/SearchComponent.vue";
 import SuccessModal from "../components/SuccessModal.vue";
+import ModalComponentVue from "../components/ModalComponent.vue";
 //
 const initial_data = reactive({
   menu: [],
   acs_table: [],
   path_getall: "/acs/getAllAcs",
   path_getSearch: "/acs/get",
-  showSuccess: false
+  showSuccess: false,
+  departmentData: [],
+  departmentSelect: [],
+  showDepartment: false,
 });
 // when app create
 onMounted(() => {
   axios.get(apiUrl + "/getmenu").then((response) => {
     initial_data.menu = response.data.mainmenu;
+  });
+  axios.get(apiUrl + "/acs/department").then(response => {
+    initial_data.departmentSelect = response.data.body;
+    initial_data.departmentData = response.data.body;
   });
 });
 
@@ -244,6 +308,7 @@ const data_for_sent = reactive({
   position_name: "",
   menu_privi: "",
   department: "",
+  departmentID: 1
 });
 // about confirm modal
 const confirmmodal = reactive ({
@@ -266,8 +331,8 @@ const showconfirm = () => {
         data_for_sent.menu_privi = data_for_sent.menu_privi + item.id
       }
     }
-  }
-  if (data_for_sent.position_name != "" && data_for_sent.department != "" && data_for_sent.menu_privi != ""){
+  };
+  if (data_for_sent.position_name != "" && data_for_sent.menu_privi != ""){
     confirmmodal.showConfirm = true;
     confirmmodal.showSubmitBtn = true;
     confirmmodal.message = "ทำการบันทึกสิทธิการเข้าใช้งาน"
@@ -292,13 +357,18 @@ const ConfirmModalReturn = (event:boolean) => {
         data_for_sent.menu_privi = ""
         data_for_sent.department = ""
         CheckBoxRam.value = []
+        initial_data.showSuccess = true;
       },1000)
+      setTimeout(function(){
+        initial_data.showSuccess = false;
+      },3500);
     })
   }
 }
 // search component
 const getDataFromSearchComponent = (data:any) => {
   initial_data.acs_table = data
+  console.log(data)
 }
 const isShowSaerch = ref(true);
 // edit acs
@@ -309,7 +379,8 @@ const dataEdit = reactive({
   id: 0,
   position_name: "", 
   department: "",
-  menu_privi: ""
+  menu_privi: "",
+  departmentID: 0
 });
 const ShowUpdateAcs = (id:number) => {
   axios.get(apiUrl + "/acs/get/" + id).then(response => {
@@ -317,12 +388,13 @@ const ShowUpdateAcs = (id:number) => {
     dataEdit.position_name = response.data.body[0].position_name;
     dataEdit.department = response.data.body[0].department;
     dataEdit.menu_privi = response.data.body[0].menu_privi;
+    dataEdit.departmentID = response.data.body[0].departmentID;
     statusAcsEditModal.isShow = true
+    /* console.log(dataEdit.departmentID) */
   });
 };
 const UpdateAcs = () => {
   axios.patch(apiUrl + "/acs/patch/" + dataEdit.id, dataEdit).then(response => {
-    console.log(response.data.message);
     isShowSaerch.value = false;
     setTimeout(function(){
       isShowSaerch.value = true;
@@ -334,4 +406,28 @@ const UpdateAcs = () => {
     },3500);
   });
 };
+// department
+const departmentData = reactive({
+  department_name: ""
+});
+const addNewDepartment = () => {
+  axios.post(apiUrl + "/acs/department/create", departmentData).then(response => {
+    if ( response.data.status == true){
+      axios.get(apiUrl + "/acs/department").then(response => {
+        initial_data.departmentData = response.data.body;
+      });
+    }
+  });
+};
+const deleteDepartment = (ID:any) => {
+  if (confirm("คุณต้องการลบข้อมูล?") == true){
+    axios.delete(apiUrl + "/acs/department/delete/" + ID).then(response => {
+      axios.get(apiUrl + "/acs/department").then(response => {
+        initial_data.departmentData = response.data.body;
+      });
+    });
+  }else{
+    return;
+  }
+}
 </script>

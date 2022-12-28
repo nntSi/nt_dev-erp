@@ -11,7 +11,9 @@ const User = sequelize.define('User', {
   mobile: Sequelize.STRING,
   privi: Sequelize.INTEGER,
   email: Sequelize.STRING,
-  token: Sequelize.STRING
+  token: Sequelize.STRING,
+  image: Sequelize.STRING,
+  department: Sequelize.INTEGER,
 });
 
 User.sync({ alter: true });

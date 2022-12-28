@@ -55,13 +55,14 @@ export default defineComponent({
     //search onchange functiuon
     const search = () => {
       if (inintial.search == "") {
-        axios.get(apiUrl + props.pathgetall).then(response => {
+        axios.get(apiUrl + props.pathgetall ).then(response => {
           inintial.data = response.data.body
           emit("returnDataSearch", inintial.data);
         });
       }else{
         axios.get(apiUrl + props.pathgetsearch + "/" + inintial.search).then(response => {
           inintial.data = response.data.body
+          console.log(inintial.data)
           emit("returnDataSearch", inintial.data);
         });
       }

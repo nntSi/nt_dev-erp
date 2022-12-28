@@ -1,30 +1,45 @@
 <template>
-  <nav aria-label="Page navigation example">
-  <ul class="inline-flex -space-x-px shadow-md">
+<div>
+  <ul class="flex">
     <li>
-      <a href="#" class="px-3 py-1 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+      <button @click="gotoPage(1)" class="py-1.5 px-3 text-slate-600 rounded-l-md border text-sm mt-2 font-semibold">หน้าแรก</button>
     </li>
     <li>
-      <a href="#" class="px-3 py-1 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+      <button v-if="(initial.page - 1) != 0" @click="gotoPage(initial.page - 1)" class="py-1.5 px-3 text-slate-600 border-y border-r text-sm mt-2 font-medium hover:bg-gray-50">{{ initial.page - 1 }}</button>
     </li>
     <li>
-      <a href="#" class="px-3 py-1 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
+      <button v-if="true" @click="gotoPage(initial.page)" class="py-1.5 px-3 bg-gray-100 text-slate-600 border-y border-r text-sm mt-2 font-medium hover:bg-gray-50">{{ initial.page }}</button>
     </li>
     <li>
-      <a href="#" aria-current="page" class="px-3 py-1 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
+      <button v-if="Math.ceil( count/limit ) > initial.page" @click="gotoPage(initial.page + 1)" class="py-1.5 px-3 text-slate-600 border-y border-r text-sm mt-2 font-medium hover:bg-gray-50">{{ initial.page + 1 }}</button>
     </li>
     <li>
-      <a href="#" class="px-3 py-1 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+      <button @click="gotoPage(Math.ceil( count/limit ))" class="py-1.5 px-3 text-slate-600 rounded-r-md border-y border-r text-sm mt-2 font-semibold">หน้าสุดท้าย</button>
     </li>
   </ul>
-</nav>
+</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, reactive } from 'vue';
 export default defineComponent({
+  emits: ["offset"],
+  props: ["count", "limit"],
   setup(props, {emit}) {
-    return {}
+    const initial = reactive({
+      x: false,
+      y: false,
+      z: false,
+      page: 1
+    });
+    const gotoPage = (page:number) => {
+      initial.page = page;
+      emit("offset", (page - 1)*props.limit);
+    };
+    return {
+      initial,
+      gotoPage
+    }
   },
 })
 </script>
