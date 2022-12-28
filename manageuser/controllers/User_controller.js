@@ -69,7 +69,7 @@ module.exports.filterByDepartment = async (req, res) => {
   User.belongsTo(Accessmng, {foreignKey: 'privi'});
   Department.hasMany(Accessmng, {foreignKey: 'departmentID'});
   Accessmng.belongsTo(Department, {foreignKey: 'departmentID'});
-  /* console.log(req.params.id) */
+  console.log(req.params.P)
   const allusr = await User.findAll({
     where:{
       /* department: Number(req.params.ID) */

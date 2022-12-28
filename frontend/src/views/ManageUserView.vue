@@ -386,9 +386,11 @@ const offsetReturn = (event:number) => {
 }
 // filter by department
 const DepartmentFilterSeleted = (event:number) => {
+  /* console.log(event) */
   initial.offset = 0
   initial.pathTable = apiUrl + "/user/department/" + event + "/0/" + initial.limitTable + "/0" + '/';
   axios.get(initial.pathTable + initial.offset).then(response => {
+    console.log(response.data.count)
     initial.dataTable = response.data.body
     initial.coutTable = response.data.count
   });

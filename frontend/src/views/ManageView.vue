@@ -273,9 +273,12 @@ onMounted(() => {
   axios.get(apiUrl + "/acs/department").then(response => {
     initial_data.departmentSelect = response.data.body;
     initial_data.departmentData = response.data.body;
+    /* console.log(initial_data.departmentData); */
   });
+  axios.get(apiUrl + "/acs/getAllAcs").then(response => {
+    initial_data.acs_table = response.data.body
+  })
 });
-
 // menu privi setup
 const selected_array: any[] = [];
 const CheckBoxRam = ref([]); // check box value
@@ -368,7 +371,6 @@ const ConfirmModalReturn = (event:boolean) => {
 // search component
 const getDataFromSearchComponent = (data:any) => {
   initial_data.acs_table = data
-  console.log(data)
 }
 const isShowSaerch = ref(true);
 // edit acs
