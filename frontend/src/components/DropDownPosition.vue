@@ -1,7 +1,7 @@
 <template>
   <div class="relative inline-block text-left">
     <div>
-      <button @click="toggleShow" type="button" class="inline-flex w-full justify-center rounded-md w-40 border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-gray-100" id="menu-button" aria-expanded="true" aria-haspopup="true">
+      <button @click="toggleShow" type="button" class="inline-flex w-full justify-center rounded-md w-60 border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-gray-100" id="menu-button" aria-expanded="true" aria-haspopup="true">
         {{ initial.name }}
         <!-- Heroicon name: mini/chevron-down -->
         <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -10,7 +10,7 @@
       </button>
     </div>
 
-    <div v-if="initial.isShow" class="absolute left-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+    <div v-if="initial.isShow" class="absolute left-0 z-10 mt-2 w-60 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
       <div class="py-1" role="none">
         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
         <button @click="selected(item['id'], item['position_name'])" v-for="(item, index) in initial.data" :key="index" class="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" role="menuitem" tabindex="-1">{{ item["position_name"] }}</button>

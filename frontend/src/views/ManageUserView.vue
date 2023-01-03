@@ -240,6 +240,7 @@ onMounted(() => {
   axios.get(initial.pathTable + 0).then(response => {
     initial.dataTable = response.data.body
     initial.coutTable = response.data.count
+    console.log(initial.dataTable)
   });
   axios.get(apiUrl + "/acs/getAllAcs").then(response => {
     initial.priviData = response.data.body
@@ -300,7 +301,7 @@ const ConfirmModalReturn = (event:boolean) => {
   if(event){
     axios.post(apiUrl + "/user/create", newUser).then(response => {
       if (response.data.status == true){
-        axios.get(apiUrl + "/user").then(response => {
+        axios.get(initial.pathTable + 0).then(response => {
           initial.dataTable = response.data.body;
         });
         setTimeout(function(){
@@ -330,7 +331,7 @@ const confirmDeleteReturn = (event:boolean) => {
     initial.showDeleteConfirm = false
     axios.delete(apiUrl + "/user/delete/" + userID.value).then(response => {
       if( response.data.status == true){
-        axios.get(apiUrl + "/user").then(response => {
+        axios.get(apiUrl + "/user/" + initial.limitTable + "/" + "0").then(response => {
           initial.dataTable = response.data.body
         });
         initial.successAddNewModal = true;
@@ -383,7 +384,7 @@ const offsetReturn = (event:number) => {
     initial.dataTable = response.data.body
     initial.coutTable = response.data.count
   })
-}
+};
 // filter by department
 const DepartmentFilterSeleted = (event:number) => {
   /* console.log(event) */
@@ -394,7 +395,7 @@ const DepartmentFilterSeleted = (event:number) => {
     initial.dataTable = response.data.body
     initial.coutTable = response.data.count
   });
-}
+};
 // filter by position
 const PositionFilterSeleted = (event:number) => {
   initial.offset = 0
@@ -403,7 +404,7 @@ const PositionFilterSeleted = (event:number) => {
     initial.dataTable = response.data.body
     initial.coutTable = response.data.count
   });
-}
+};
 const SearchFilter = (event:string) => {
   if (event == "" || null){
     initial.offset = 0
@@ -420,5 +421,5 @@ const SearchFilter = (event:string) => {
     initial.dataTable = response.data.body
     initial.coutTable = response.data.count
   });
-}
+};
 </script>

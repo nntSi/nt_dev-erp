@@ -1,6 +1,6 @@
 <template>
-  <aside class="w-80 lg:h-screen" aria-label="Sidebar">
-      <div class="overflow-y-auto py-4 px-8 bg-white rounded-xl border dark:bg-gray-800 shadow-lg h-full">
+  <aside class="w-80 h-full" aria-label="Sidebar">
+      <div class="overflow-y-auto py-4 px-8 bg-white rounded-xl border dark:bg-gray-800 shadow-lg h-screen">
         <h1 class="text-4xl font-extrabold text-center mt-4 text-slate-700">SURVEY<br>HUB</h1>
         <p class="text-xs text-center mt-1">ระบบจัดการเคลมเวอร์ชั่น 2</p>
         <button type="button" class="flex text-gray-400 mt-3 shadow-sm text-left bg-white border font-medium border-gray-300 focus:outline-none hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 rounded-md text-sm px-5 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 w-full">

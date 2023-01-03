@@ -1,8 +1,6 @@
 <template>
   <!-- <button @click="open = true">Open Modal</button> -->
-  <div
-    class="fixed z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full flex justify-center items-center w-full bg-opacity-75 bg-black"
-  >
+  <div class="fixed z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full flex justify-center items-center w-full bg-opacity-75 bg-black">
     <div class="relative w-full h-full max-w-md md:h-auto">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <button
@@ -67,6 +65,7 @@
 </template>
 
 <script lang="ts">
+
 import { defineComponent } from 'vue';
 export default defineComponent({
   emits: ["returnConfirm"],
@@ -83,7 +82,8 @@ export default defineComponent({
       submit
     }
   },
-})
+});
+
 </script>
 
 <style scoped></style>

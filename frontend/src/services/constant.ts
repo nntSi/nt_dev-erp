@@ -1,4 +1,4 @@
-export const apiUrl = "http://localhost:3000/manage";
+export const apiUrl = "http://localhost:3000/svh/insurance";
 
 export const server = {
   USERNAME: `username`,

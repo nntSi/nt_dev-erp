@@ -109,3 +109,23 @@ module.exports.filterByDepartment = async (req, res) => {
   });
   res.json({body: allusr, count: countNUmber});
 };
+
+module.exports.filterPrivi = async (req, res) => {
+  const filterPrivi = await User.findAll({
+    attributes: ['title', 'fullname', 'lastname' ,'mobile', 'username', 'id'],
+    where:{
+      privi: Number(req.params.id)
+    }
+  });
+  res.json({body: filterPrivi, status: true});
+};
+
+module.exports.getUserfit = async (req, res) => {
+  const user = await User.findAll({
+    attributes: ['title', 'fullname', 'lastname' ,'mobile', 'username', 'id'],
+    where:{
+      id: Number(req.params.id)
+    }
+  });
+  res.json({body: user, status: true});
+};
