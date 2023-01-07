@@ -29,7 +29,7 @@ export default defineComponent({
         monthSend = "0" + monthSend;
       };
 
-      date_forsent.value = `${year}/${monthSend}/${daySend }`;
+      date_forsent.value = `${year}-${monthSend}-${daySend }`;
       emit('returnDate', date_forsent.value);
       return `วันที่ ${day} ${mounthThai[month-1]} ${year}`;
     }

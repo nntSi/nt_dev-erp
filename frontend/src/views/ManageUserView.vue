@@ -13,7 +13,7 @@
       </p>
       <div class="flex items-center w-full">
         <div class="w-72 mr-3">
-          <SearchGobalVue @returnSearch="SearchFilter"/>
+          <SearchGobalVue @returnSearch="SearchFilter" placeholder-text="ค้นหารายชื่อผู้ใช้"/>
         </div>
         <DropDownVue :nameDP="'เลือกแผนก'" :path="'/acs/department'" class="mr-3" @returnDP="DepartmentFilterSeleted"/>
         <DropDownPositionVue :nameDP="'ตำแหน่ง'" :path="'/acs/getAllAcs'" @returnDP="PositionFilterSeleted"/>

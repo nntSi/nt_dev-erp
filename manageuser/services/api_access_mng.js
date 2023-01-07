@@ -40,5 +40,5 @@ router.delete("/acs/department/delete/:ID", async (req, res) => {
 });
 router.get("/acs/department/:ID", async (req, res) => {
   await getDepartmentByID(req, res);
-})
+});
 module.exports = router;

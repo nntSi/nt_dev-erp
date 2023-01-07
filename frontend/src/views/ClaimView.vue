@@ -84,8 +84,10 @@
     </div>
   </div>
   <!-- {{ initial.claimModel }} -->
-  <ModalConfirmVue :message="initial.modalConfirm.message" v-if="initial.modalConfirm.isShow" @isShow="controlConfirmModal"/>
+  <ModalConfirmVue :message="initial.modalConfirm.message" v-if="initial.modalConfirm.isShow" @isShow="controlConfirmModal" @submitState="confirmState"/>
   <ModalMessageVue message="กรุณากรอกข้อมูลให้ครบด้วยนะครับ" v-if="initial.modalMessage.isShow" @isShow="controlMessageModal" />
+  <ModalResultClaim v-if="initial.modalResult.isShow" :svh_code="initial.claimModel.svh_code" @isShow="controlResultModal" />
+  <!-- <ModalResultClaim svh_code="SVH01473"/> -->
 </template>
 
 <script setup lang="ts">
@@ -94,7 +96,9 @@ import { reactive, ref, onMounted } from 'vue';
 import DatePickerComponent from '../components/DatePickerComponent.vue';
 import { apiUrl } from '../services/constant';
 import ModalMessageVue from "../components/modal/ModalMessage.vue";
-import ModalConfirmVue from '../components/modal/ModalConfirm.vue';
+import ModalConfirmVue from "../components/modal/ModalConfirm.vue";
+import ModalResultClaim from "../components/modal/ModalResultClaim.vue";
+import ModalSubclaimVue from '../components/modal/ModalSubclaim.vue';
 
 onMounted(() => {
   runTime();
@@ -132,7 +136,9 @@ const initial = reactive({
     brand_car:"",
     customer_claim_mobile:"",
     customer_claim_name:"",
-    license_plate:""
+    license_plate:"",
+    claim_code: "",
+    insurance_code: ""
   },
   // modal message
   modalMessage: {
@@ -162,8 +168,6 @@ const initial = reactive({
 //
 // set claim model to default
 const setClaimDefault = () => {
-  initial.claimModel.date = "";
-  initial.claimModel.time = "";
   initial.claimModel.company = "";
   initial.claimModel.type = "";
   initial.claimModel.source_employee = "";
@@ -243,18 +247,37 @@ const checkForm = () => {
     initial.modalConfirm.message = "คุณต้องการที่จะออกเลขเคลมใช่หรือไม่?";
   };
 };
-
+// close modal
 const controlMessageModal = (event:boolean) => {
-  initial.modalMessage.isShow = event
+  initial.modalMessage.isShow = event;
 };
 
 const controlConfirmModal = (event:boolean) => {
-  initial.modalConfirm.isShow = event
+  initial.modalConfirm.isShow = event;
+};
+
+const controlResultModal = (event:boolean) => {
+  initial.modalResult.isShow = event;
+  setClaimDefault();
 };
 
 const confirmState = (event:boolean) => {
   if(event){
-    
+    axios.post(apiUrl + "/claim/create", initial.claimModel).then(response => {
+      if(response.data.status == true){
+        initial.modalConfirm.isShow = false;
+        initial.modalResult.isShow = true;
+        initial.claimModel.svh_code = response.data.svh_code;
+        /* alert(response.data.message); */
+      }else{
+        initial.modalConfirm.message = response.data.message;
+        /* alert(response.data.message); */
+        setTimeout(() => {
+          setClaimDefault();
+          initial.modalConfirm.isShow = false
+        },2000)
+      }
+    });
   }
 };
 

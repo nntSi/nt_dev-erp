@@ -3,7 +3,8 @@ import LoginView from '../views/LoginView.vue'
 import DashboardViewVue from '../views/DashboardView.vue';
 import ManageViewVue from '../views/ManageView.vue';
 import ManageUserViewVue from '../views/ManageUserView.vue';
-import ClaimView from '../views/ClaimView.vue'
+import ClaimView from '../views/ClaimView.vue';
+import ClaimStatus from '../views/ClaimStatus.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/claim',
     name: 'claim',
     component: ClaimView
+  },
+  {
+    path: '/claimstate',
+    name: 'status',
+    component: ClaimStatus
   }
 ]
 

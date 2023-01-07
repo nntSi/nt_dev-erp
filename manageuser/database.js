@@ -6,7 +6,8 @@ const sequelize = new Sequelize(
   'Surveyhubtrue', 
   {
   host: 'localhost',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  logging: false
 });
 
 module.exports = sequelize;
