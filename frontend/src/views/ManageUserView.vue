@@ -17,7 +17,7 @@
         </div>
         <DropDownVue :nameDP="'เลือกแผนก'" :path="'/acs/department'" class="mr-3" @returnDP="DepartmentFilterSeleted"/>
         <DropDownPositionVue :nameDP="'ตำแหน่ง'" :path="'/acs/getAllAcs'" @returnDP="PositionFilterSeleted"/>
-        <button class="border bg-slate-700 text-white shadow-sm px-5 py-2.5 ml-auto rounded-md text-sm hover:bg-slate-800" @click="initial.isShowAddUserModal = true">
+        <button class="border bg-slate-700 text-white shadow-sm pl-10 pr-12 py-2.5 ml-auto rounded-md text-sm hover:bg-slate-800" @click="initial.isShowAddUserModal = true">
           <i class="bi bi-plus"></i>
           เพิ่มรายชื่อผู้ใช้
         </button>

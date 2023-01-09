@@ -5,7 +5,7 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: Surveyhubtrue
-      MYSQL_DATABASE: manageuser
+      MYSQL_DATABASE: svh_db_prd
       MYSQL_PASSWORD: Surveyhubtrue
     volumes:
       - db_data:/var/lib/mysql
