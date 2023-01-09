@@ -1,9 +1,23 @@
 <template>
   <div>
     <div class="bg-white p-6 shadow-md sm:rounded-md border">
-      <h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">ออกเลขการทำเคลม</h5>
-      <p class="mb-5 font-normal text-gray-700 dark:text-gray-400">สร้างรหัสเคลม และบันทึกข้อมูล</p>
+      <div class="flex mb-5">
+        <div>
+          <h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">ออกเลขการทำเคลม</h5>
+          <p class="font-normal text-gray-700 dark:text-gray-400">สร้างรหัสเคลม และบันทึกข้อมูล</p>
+        </div>
+        <div class="ml-auto mt-auto">
+          <!-- <div class="flex pl-8 pr-20 border border-gray-200 rounded dark:border-gray-700 py-4">
+            <input v-model="initial.oldClaim" id="bordered-checkbox-2" type="checkbox" name="bordered-checkbox" class="w-4 h-4 mt-1.5 text-slate-600 bg-gray-100 border-gray-300 rounded focus:ring-slate-500 dark:focus:ring-slate-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="bordered-checkbox-2" class="w-full ml-3 text-md font-bold text-gray-900 dark:text-gray-300">เคลมเก่าที่ไม่มีในระบบ <br><p class="text-xs font-normal">สำหรับเคลมที่ไม่เคยมีในระบบ หรือก่อนที่ใช้ระบบนี้</p></label>
+          </div> -->
+        </div>
+      </div>
       <div class="p-6 border rounded-md mb-3">
+        <div class="mb-2" v-if="initial.oldClaim">
+          <label class="block mb-2 text-md font-bold text-gray-900 dark:text-white">เลขเซอเวย์</label>
+          <input v-model="initial.claimModel.svh_code" type="text" class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-slate-500 focus:border-slate-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="SVH01XXX">
+        </div>
         <div class="grid lg:grid-cols-2 mb-2 grid-cols-1 gap-4">
           <div>
             <label class="block mb-2 text-md font-bold text-gray-900 dark:text-white">วันที่รับแจ้ง</label>
@@ -29,6 +43,7 @@
               <option value="เคลมสด">เคลมสด</option>
               <option value="เคลมแห้ง">เคลมแห้ง</option>
               <option value="ติดตามผลคดี">ติดตามผลคดี</option>
+              <option value="เคลมนัดหมาย">เคลมนัดหมาย</option>
             </select>
           </div>
           <div>
@@ -38,8 +53,8 @@
         </div>
         <div class="grid lg:grid-cols-2 grid-cols-1 gap-4 mb-2" v-if="initial.showDry">
           <div>
-            <label class="block mb-2 text-md font-bold text-gray-900 dark:text-white">วันนัดหมาย</label>
-            <input v-model="initial.claimModel.date_dry" type="text" class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-slate-500 focus:border-slate-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="วันที่ 10 มกราคม 2565">
+            <label class="block mb-2 text-md font-bold text-gray-900 dark:text-white">วันนัดหมาย (ปี-เดือน-วัน)</label>
+            <input v-model="initial.claimModel.date_dry" type="text" class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-slate-500 focus:border-slate-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="xxxx-xx-xx">
           </div>
           <div>
             <label class="block mb-2 text-md font-bold text-gray-900 dark:text-white">เวลา</label>
@@ -115,6 +130,7 @@ onMounted(() => {
 });
 
 const initial = reactive({
+  oldClaim: false,
   claimModel: {
     date:"",
     time:"",

@@ -23,7 +23,6 @@ module.exports.claimWord = async (req, res) => {
       replacements: [req.params.svhcode],
       type: QueryTypes.SELECT
     });
-    /* console.log(results.name); */
     const month_th = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
     const dateArray = results.date.split("-");
 
@@ -65,4 +64,59 @@ module.exports.claimWord = async (req, res) => {
         "Content-Disposition": "attachment"
     }).end(buf)
     /* return fs.writeFileSync(path.resolve(__dirname, req.params.svhcode + "originx.docx"), buf); */
-}
+};
+
+module.exports.subClaimWord = async (req, res) => {
+    const [results, metadata] = await sequelize
+    .query("SELECT * FROM Subclaims LEFT JOIN Provinces ON Subclaims.province=Provinces.id WHERE code_sub = ?", {
+      replacements: [req.params.codesub],
+      type: QueryTypes.SELECT
+    });
+    const [results2, metadata2] = await sequelize
+    .query("SELECT * FROM Subclaims LEFT JOIN Districts ON Subclaims.district=Districts.id WHERE code_sub = ?", {
+      replacements: [req.params.codesub],
+      type: QueryTypes.SELECT
+    });
+    /* console.log(results.inspector); */
+    const month_th = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+    const dateArray = results.date.split("-");
+
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+    });
+    doc.render({
+        /* svhcode: "sfgsss" */
+        svh_code: results.code_sub,
+        employee: results.employee,
+        inspector: results.inspector,
+        inspector_mobile: results.inspector_mobile,
+        company: results.company,
+        type: results.type,
+        location: results.location,
+        date: parseInt(dateArray[2]),
+        month: month_th[parseInt(dateArray[1]) - 1],
+        year: dateArray[0],
+        district: results2.district_name,
+        province: results.province_name,
+        source_employee: results.source_employee,
+        customer_claim_name: results.customer_claim_name,
+        customer_claim_mobile: results.customer_claim_mobile,
+        license_plate: results.license_plate,
+        brand_car: results.brand_car,
+        time: results.time,
+        date_dry: results.date_dry,
+        time_dry: results.time_dry
+    });
+    buf = doc.getZip().generate({
+        type: "nodebuffer",
+        compression: "DEFLATE",
+    });
+    /* console.log(buf); */
+    res.writeHead(200, {
+        "Content-Type": "application/docx",
+        "Content-Disposition": "attachment"
+    }).end(buf)
+    /* return fs.writeFileSync(path.resolve(__dirname, req.params.svhcode + "originx.docx"), buf); */
+};

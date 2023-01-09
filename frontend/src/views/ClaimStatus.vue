@@ -46,8 +46,8 @@
                   {{ item['time'] }}
                 </td>
                 <td class="px-6 py-4">
-                  <button @click="ShowSubModal(item['svh_code'])" class="hover:underline">เคลมตาม</button> /
-                  <button class="hover:underline">แก้ไข</button>
+                  <button @click="ShowEditModal(item['svh_code'])" class="hover:underline">แก้ไข</button> /
+                  <button @click="ShowSubModal(item['svh_code'])" class="hover:underline">เคลมตาม</button>
                 </td>
               </tr>
             </tbody>
@@ -58,11 +58,13 @@
     </div>
     <ModalResultClaimVue v-if="initial.modalResult.isShow" :svh_code="initial.modalResult.svh_code" @isShow="ControlResultModal"/>
     <ModalSubclaimVue :svh_code="initial.SubClaim.svh_code" v-if="initial.SubClaim.isShow" @is-show="ControlSubModal"/>
+    <ModalClaimEditVue v-if="initial.EditModal.isShow" :svh_code="initial.EditModal.svh_code" @is-show="ControlEditModal"/>
   </div>
 </template>
 
 <script setup lang="ts">
 // import component
+import ModalClaimEditVue from '../components/modal/ModalClaimEdit.vue';
 import SearchGobalVue from '../components/SearchGobal.vue';
 import DropdownCompany from '../components/dropdown/DropdownCompany.vue';
 import PaginationComponentVue from '../components/PaginationComponent.vue';
@@ -88,6 +90,10 @@ const initial = reactive({
     svh_code: ""
   },
   SubClaim:{
+    isShow: false,
+    svh_code: ""
+  },
+  EditModal:{
     isShow: false,
     svh_code: ""
   }
@@ -138,13 +144,23 @@ const ResultModal = (svhcode:string) => {
   initial.modalResult.isShow = true;
 };
 const ControlResultModal = (event:boolean) => {
+  getFirstDataTable();
   initial.modalResult.isShow = event;
 };
 const ControlSubModal = (event:boolean) => {
+  getFirstDataTable();
   initial.SubClaim.isShow = event;
 };
+const ControlEditModal = (event:boolean) => {
+  getFirstDataTable();
+  initial.EditModal.isShow = event;
+}
 const ShowSubModal = (svhcode:string) => {
   initial.SubClaim.isShow = true,
   initial.SubClaim.svh_code = svhcode
-}
+};
+const ShowEditModal = (svhcode:string) => {
+  initial.EditModal.isShow = true,
+  initial.EditModal.svh_code = svhcode
+};
 </script>

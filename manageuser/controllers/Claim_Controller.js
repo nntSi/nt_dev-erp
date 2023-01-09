@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const Claim = require("../models/Claim");
 const Subclaim = require("../models/Subclaim");
+const Claimold = require("../models/Claimold");
 
 module.exports.getAllClaim = async (req, res) => {
   try {
@@ -8,6 +9,7 @@ module.exports.getAllClaim = async (req, res) => {
       order: [
         ["date", "DESC"],
         ["time", "DESC"],
+        ["id", "DESC"]
       ],
       offset: Number(req.params.offset),
       limit: 10,
@@ -19,14 +21,15 @@ module.exports.getAllClaim = async (req, res) => {
 };
 
 const FIRSTCODE = "SVH";
-const SECCOND = "01";
-const START = 473;
+const SECCOND = "0";
+const START = 1;
 
 module.exports.createClaim = async (req, res) => {
   try {
     const count = await Claim.count({ where: { sts: 1 } });
     let code = FIRSTCODE + SECCOND + (START + count);
     const claim = await Claim.create({
+      id: START + count,
       date: req.body.date,
       time: req.body.time,
       company: req.body.company,
@@ -61,6 +64,7 @@ module.exports.createClaim = async (req, res) => {
       res.json({ status: false, message: "Create claim unsuccess!!" });
     }
   } catch (err) {
+    console.log(err)
     res.json({ status: false, message: err });
   }
 };
@@ -265,8 +269,8 @@ module.exports.createSubClaim = async (req, res) => {
     const count = await Subclaim.count({
       where: {
         sts: 1,
-        svh_code: req.body.svh_code
-      }
+        svh_code: req.body.svh_code,
+      },
     });
     /* console.log(count); */
     let code = req.body.svh_code + "-" + (count + 1);
@@ -289,7 +293,7 @@ module.exports.createSubClaim = async (req, res) => {
       province: req.body.province,
       district: req.body.district,
       brand_car: req.body.brand_car,
-      customer_cliam_mobile: req.body.customer_cliam_mobile,
+      customer_claim_mobile: req.body.customer_claim_mobile,
       customer_claim_name: req.body.customer_claim_name,
       license_plate: req.body.license_plate,
       claim_code: req.body.claim_code,
@@ -316,34 +320,123 @@ module.exports.getSubBySVHCODE = async (req, res) => {
   try {
     const allsub = await Subclaim.findAll({
       where: {
-        svh_code: req.params.svhcode
-      }
+        svh_code: req.params.svhcode,
+      },
     });
-    if(allsub){
-      res.json({status: true, message: "Get subclaim success", body: allsub});
-    }else{
-      res.json({status: false, message: "Get subclaim unsuccess"});
+    if (allsub) {
+      res.json({ status: true, message: "Get subclaim success", body: allsub });
+    } else {
+      res.json({ status: false, message: "Get subclaim unsuccess" });
     }
   } catch (err) {
     console.log(err);
-    res.json({status: false, message: "Get subclaim unsuccess :" + err});
+    res.json({ status: false, message: "Get subclaim unsuccess :" + err });
   }
 };
 
 module.exports.getSubBySUBCODE = async (req, res) => {
   try {
     const sub = await Subclaim.findAll({
+      order: [
+        ["date", "DESC"],
+        ["time", "DESC"],
+      ],
       where: {
-        code_sub: req.params.codesub
-      }
+        code_sub: req.params.codesub,
+      },
     });
-    if(sub){
-      res.json({status: true, message: "Get subclaim success", body: sub});
+    if (sub) {
+      res.json({ status: true, message: "Get subclaim success", body: sub });
+    } else {
+      res.json({ status: false, message: "Get subclaim unsuccess" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false, message: "Get subclaim unsuccess :" + err });
+  }
+};
+
+module.exports.deleteSubClaim = async (req, res) => {
+  try {
+    const subDelete = await Subclaim.destroy({
+      where: {
+        code_sub: req.params.codesub,
+      },
+    });
+    if (subDelete) {
+      res.json({ status: true, message: "Delete this sub claim successful" });
+    } else {
+      res.json({ status: false, message: "Can't delete this sub claim" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false, message: "Can't delete this sub claim:" + err });
+  }
+};
+
+module.exports.updateSubClaimBySUBCODE = async (req, res) => {
+  try {
+    const upsub = await Subclaim.update(req.body, {
+      where: {
+        code_sub: req.params.subcode,
+      },
+    });
+    if (upsub) {
+      res.json({ message: "Update subclaim success", status: true });
+    } else {
+      res.json({ message: "Update data unsuccess 1", status: false });
+    }
+  } catch (err) {
+    res.json({ message: "Update data unsuccess 2" + err, status: false });
+  }
+};
+
+module.exports.createOldClaim = async (req, res) => {
+  try{
+    const [old_claim, created] = await Claimold.findOrCreate({
+      where: { svh_code: req.body.svh_code },
+      defaults: req.body
+    });
+    if(created){
+      res.json({status: true, message: "Create old claim successful!!!", body: old_claim});
     }else{
-      res.json({status: false, message: "Get subclaim unsuccess"});
+      res.json({status: false, message: "รหัสเคลมนี้มีอยู่ในระบบแล้ว"});
     }
   }catch(err){
-    console.log(err);
-    res.json({status: false, message: "Get subclaim unsuccess :" + err});
+    res.json({status: false, message: "Create old claim error is : " + err});
   }
+};
+
+module.exports.updateLoopClaim = async (req, res) => {
+  let dArray = req.body.data
+  /* console.log(dArray.length) */
+  for(let i = 0; i < dArray.length; i++){
+    /* console.log(dArray[i].date); */
+    await Claim.update({
+      date: dArray[i].date,
+      time: dArray[i].time,
+      company: dArray[i].company,
+      type: dArray[i].type,
+      employee: dArray[i].employee,
+      inspector_id: dArray[i].inspector_id,
+      Inspector: dArray[i].Inspector,
+      source_employee: dArray[i].source_employee,
+      location: dArray[i].location,
+      accident: dArray[i].accident,
+      inspector_mobile: dArray[i].inspector_mobile,
+      date_dry: dArray[i].date_dry,
+      time_dry: dArray[i].time_dry,
+      province: dArray[i].province,
+      district: dArray[i].district,
+      brand_car: dArray[i].brand_car,
+      customer_claim_mobile: dArray[i].customer_claim_mobile	,
+      customer_claim_name: dArray[i].customer_claim_name,
+      license_plate: dArray[i].license_plate,
+    }, {
+      where: {
+        svh_code: dArray[i].svh_code,
+      },
+    });
+  }
+  res.json({ status: true, message: "Update claim successful " });
 }

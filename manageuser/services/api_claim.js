@@ -9,6 +9,10 @@ const {
   createSubClaim,
   getSubBySVHCODE,
   getSubBySUBCODE,
+  deleteSubClaim,
+  updateSubClaimBySUBCODE,
+  createOldClaim,
+  updateLoopClaim
 } = require("../controllers/Claim_Controller");
 
 router.get("/claim/:offset", async (req, res) => {
@@ -42,5 +46,22 @@ router.get("/claim/subclaim/svhcode/:svhcode", async (req, res) => {
 router.get("/claim/subclaim/subcode/:codesub", async (req, res) => {
   getSubBySUBCODE(req, res);
 });
+
+router.delete("/claim/subclaim/delete/:codesub", async (req, res) => {
+  deleteSubClaim(req, res);
+});
+
+router.patch("/claim/subclaim/patch/:subcode", async (req, res) => {
+  updateSubClaimBySUBCODE(req, res);
+});
+
+router.post("/claim/oldclaim/create", async (req, res) => {
+  createOldClaim(req, res);
+});
+
+router.patch("/claim/loop/updateclaim", async (req, res) => {
+  updateLoopClaim(req, res);
+});
+
 
 module.exports = router;
