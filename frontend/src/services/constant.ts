@@ -1,5 +1,6 @@
-/* export const apiUrl = "http://localhost:3000/svh/insurance"; */
-export const apiUrl = "http://https://surveyhub.wictor-th.com:3000/svh/insurance";
+export const apiUrl = window.location.host + ":3000/svh/insurance";
+/* export const apiUrl = "https//surveyhub.wictor-th.com:3000/svh/insurance"; */
+/* export const apiUrl = "http://192.168.1.101:3000/svh/insurance"; */
 
 export const server = {
   USERNAME: `username`,
