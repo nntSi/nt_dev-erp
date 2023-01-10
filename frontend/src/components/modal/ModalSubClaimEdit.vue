@@ -136,22 +136,26 @@
         </div>
       </div>
     </div>
+    <SuccessModal v-if="initial.modalSuccessShow" />
   </div>
 </template>
 
 <script lang="ts">
+import SuccessModal from "../SuccessModal.vue";
 import { downLoadSubClaim } from "../../file_saver/docx/claim";
 import axios from 'axios';
 import { apiUrl } from '../../services/constant';
 import { defineComponent, reactive, onMounted } from 'vue';
 export default defineComponent({
+  components: {
+    SuccessModal
+  },
   emits: ["isShow"],
   props: ['codesub'],
   setup(props,  {emit}) {
     onMounted(() => {
       loadDataDefualt();
     });
-
     const loadDataDefualt = () => {
       axios.get(apiUrl + "/claim/subclaim/subcode/" + props.codesub).then(response => {
         initial.claimModel.time = response.data.body[0].time
@@ -260,6 +264,7 @@ export default defineComponent({
       showDry: false,
       inspectorPre: "",
       employeePre: "",
+      modalSuccessShow: false
     });
     // set Date
     const setDate = (event:string) => {
@@ -341,8 +346,12 @@ export default defineComponent({
           /* console.log(response.data.message) */
           if(response.data.status == true){
             /* alert("อัพเดทสำเร็จ"); */
-            downLoadSubClaim(props.codesub);
-            loadDataDefualt();
+            initial.modalSuccessShow = true;
+            setTimeout(() => {
+              initial.modalSuccessShow = false;
+              downLoadSubClaim(props.codesub);
+              loadDataDefualt();
+            }, 1500);
             /* setClaimDefault(); */
             /* emit("isShow", false); */
           }
@@ -353,6 +362,7 @@ export default defineComponent({
       axios.patch(apiUrl + "/claim/subclaim/patch/" + props.codesub, initial.claimModel).then(response => {
         if(response.data.status == true){
           /* alert("อัพเดทสำเร็จ"); */
+          showSuccessmodal();
           loadDataDefualt();
           /* downLoadClaim(props.svh_code); */
           /* setClaimDefault(); */
@@ -360,6 +370,12 @@ export default defineComponent({
         }
       });
     };
+    const showSuccessmodal = () => {
+      initial.modalSuccessShow = true;
+      setTimeout(() => {
+        initial.modalSuccessShow = false;
+      }, 1500);
+    }
     const downloadDOCXSubClaim = () => {
       downLoadSubClaim(props.codesub);
     };
