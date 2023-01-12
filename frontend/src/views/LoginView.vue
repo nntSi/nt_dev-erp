@@ -82,6 +82,7 @@
 import { onMounted, reactive } from 'vue';
 import { useStore, mapState } from 'vuex';
 import router from '../router';
+import CryptoJS from 'crypto-js';
 // setup
 const store = useStore()
 const login_form = reactive({
@@ -90,6 +91,9 @@ const login_form = reactive({
 });
 // function login
 const login = () => {
+  /* login_form.password = Base64.stringify(login_form.password); */
+  let hash = CryptoJS.SHA256(login_form.password);
+  login_form.password = hash.toString(CryptoJS.enc.Hex)
   store.dispatch({
     type: 'login',
     login_form

@@ -9,10 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/crypto-js": "^4.1.1",
     "@types/file-saver": "^2.0.5",
     "axios": "^1.2.1",
+    "crypto-js": "^4.1.1",
     "file-saver": "^2.0.5",
     "flowbite": "^1.5.5",
+    "js-sha1": "^0.6.0",
     "vue": "^3.2.45",
     "vue-js-modal": "^2.0.1",
     "vue-router": "^4.1.6",
